@@ -238,20 +238,21 @@ class Manager(threading.Thread):
 
         for state in sorted(self.jobs.keys(), key=lambda j: state_overview_order.get(j, j)):
             for job in sorted(list(self.jobs[state]), key=lambda j: str(j)):
-                if hasattr(job, '_sis_needed_for_which_targets') and job._sis_needed_for_which_targets:
-                    if verbose:
-                        info_string = '%s: %s <target: %s>' % (state,
-                                                               job,
-                                                               sorted(list(job._sis_needed_for_which_targets)))
-                    else:
-                        info_string = '%s: %s <target: %s>' % (state,
-                                                               job,
-                                                               sorted(list(job._sis_needed_for_which_targets))[0])
-                else:
-                    info_string = '%s: %s' % (state, job)
+                info_string = "%s: " % state
 
                 if hasattr(job, "get_vis_name") and job.get_vis_name() is not None:
-                    info_string += " [%s]" % job.get_vis_name()
+                    info_string += "[%s] " % job.get_vis_name()
+
+                if hasattr(job, '_sis_needed_for_which_targets') and job._sis_needed_for_which_targets:
+                    if verbose:
+                        info_string += '%s <target: %s> ' % (job,
+                                                               sorted(list(job._sis_needed_for_which_targets)))
+                    else:
+                        info_string += '%s <target: %s> ' % (job,
+                                                               sorted(list(job._sis_needed_for_which_targets))[0])
+                else:
+                    info_string += '%s ' % job
+
 
                 if hasattr(job, "info") and job._sis_runnable() and not job._sis_finished():
                     job_manager_info_string = job.info()
