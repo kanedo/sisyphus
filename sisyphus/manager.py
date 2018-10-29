@@ -253,7 +253,7 @@ class Manager(threading.Thread):
                 if hasattr(job, "get_vis_name") and job.get_vis_name() is not None:
                     info_string += " [%s]" % job.get_vis_name()
 
-                if hasattr(job, "info"):
+                if hasattr(job, "info") and job._sis_runnable() and not job._sis_finished():
                     job_manager_info_string = job.info()
                     if job_manager_info_string is not None:
                         info_string += " {%s} " % job_manager_info_string
